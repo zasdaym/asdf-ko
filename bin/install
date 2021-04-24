@@ -18,19 +18,21 @@ install_ko() {
 
   case $(uname | tr '[:upper:]' '[:lower:]') in
     linux*)
-      local platform=Linux_x86_64
+      local platform=Linux
       ;;
     darwin*)
-      local platform=Darwin_x86_64
+      local platform=Darwin
       ;;
     *)
       local platform=notset
       ;;
   esac
 
-  local filename="ko_${version}_${platform}"
+  local arch=$(uname -m)
+
+  local filename="ko_${version}_${platform}_${arch}.tar.gz"
   local download_url="$(get_download_url $filename)"
-  local tmp_bin_path="${TMPDIR}/${filename}.tar.gz"
+  local tmp_bin_path="${TMPDIR}/${filename}"
 
   echo "Downloading ko from ${download_url}"
   mkdir -p $TMPDIR
@@ -52,7 +54,7 @@ install_ko() {
 
 get_download_url() {
   local filename="$1"
-  echo "https://github.com/google/ko/releases/download/v${version}/${filename}.tar.gz"
+  echo "https://github.com/google/ko/releases/download/v${version}/${filename}"
 }
 
 install_ko $ASDF_INSTALL_TYPE $ASDF_INSTALL_VERSION $ASDF_INSTALL_PATH
