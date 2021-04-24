@@ -1,49 +1,51 @@
 #!/usr/bin/env bash
 
-set -e
+set -o errexit
 set -o pipefail
 
 ASDF_INSTALL_TYPE=${ASDF_INSTALL_TYPE:-version}
-TMPDIR=${TMPDIR:-/tmp/ko}
+TMPDIR=${TMPDIR:-/tmp}
+
 [ -n "$ASDF_INSTALL_VERSION" ] || (>&2 echo 'Missing ASDF_INSTALL_VERSION' && exit 1)
 [ -n "$ASDF_INSTALL_PATH" ] || (>&2 echo 'Missing ASDF_INSTALL_PATH' && exit 1)
 
 install_ko() {
-  local install_type=$1
-  local version=$2
-  local install_path=$3
+	local install_type=$1
+	local version=$2
+	local install_path=$3
 
-  local bin_install_path="$install_path/bin"
-  local bin_path="${bin_install_path}/ko"
+	local bin_install_path="$install_path/bin"
+	local bin_path="${bin_install_path}/ko"
 
-  local platform=$(uname)
-  local arch=$(uname -m)
+	local platform=$(uname)
+	local arch=$(uname -m)
 
-  local filename="ko_${version}_${platform}_${arch}.tar.gz"
-  local download_url="$(get_download_url $filename)"
-  local tmp_bin_path="${TMPDIR}/${filename}"
+	local filename="ko_${version}_${platform}_${arch}.tar.gz"
+	local download_url="$(get_download_url $filename)"
+	local tmp_dir="${TMPDIR}/ko"
+	local tmp_archive_path="${tmp_dir}/${filename}"
 
-  echo "Downloading ko from ${download_url}"
-  mkdir -p $TMPDIR
-  curl -sL $download_url -o $tmp_bin_path
+	echo "Downloading ko from ${download_url}"
+	mkdir -p $tmp_dir
+	curl -sL $download_url -o $tmp_archive_path
 
-  echo "Extracting ${tmp_bin_path}"
-  tar -zxf $tmp_bin_path --directory $TMPDIR
+	echo "Extracting ${tmp_archive_path}"
+	tar -zxf $tmp_archive_path --directory $tmp_dir
 
-  echo "Moving bin to ${bin_path}"
-  mkdir -p $bin_install_path
-  cp $TMPDIR/ko $bin_path
+	echo "Moving bin to ${bin_path}"
+	mkdir -p $bin_install_path
+	cp $tmp_dir/ko $bin_path
 
-  echo "Cleaning tmps..."
-  rm -r $TMPDIR
+	echo "Cleaning tmps..."
+	rm -r $tmp_dir
 
-  echo "Run: asdf current ko ${version}"
-  chmod +x $bin_path
+	echo "Run: asdf current ko ${version}"
+	chmod +x $bin_path
 }
 
 get_download_url() {
-  local filename="$1"
-  echo "https://github.com/google/ko/releases/download/v${version}/${filename}"
+	local filename="$1"
+	echo "https://github.com/google/ko/releases/download/v${version}/${filename}"
 }
 
 install_ko $ASDF_INSTALL_TYPE $ASDF_INSTALL_VERSION $ASDF_INSTALL_PATH
