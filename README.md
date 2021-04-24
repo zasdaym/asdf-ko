@@ -1,6 +1,6 @@
 # asdf-ko
 
-![CI](https://github.com/zasdaym/asdf-ko/workflows/CI/badge.svg?branch=master)
+![CI](https://github.com/zasdaym/asdf-ko/workflows/test/badge.svg?branch=master)
 
 [ko](https://github.com/google/ko) plugin for [asdf](https://github.com/asdf-vm/asdf) version manager
 
