@@ -16,18 +16,7 @@ install_ko() {
   local bin_install_path="$install_path/bin"
   local bin_path="${bin_install_path}/ko"
 
-  case $(uname | tr '[:upper:]' '[:lower:]') in
-    linux*)
-      local platform=Linux
-      ;;
-    darwin*)
-      local platform=Darwin
-      ;;
-    *)
-      local platform=notset
-      ;;
-  esac
-
+  local platform=$(uname)
   local arch=$(uname -m)
 
   local filename="ko_${version}_${platform}_${arch}.tar.gz"
