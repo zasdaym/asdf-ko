@@ -2,13 +2,8 @@ name: CI
 
 on:
   push:
-    paths-ignore:
-      - '**.md'
-  pull_request:
-    paths-ignore:
-      - '**.md'
-  schedule:
-    - cron: "0 0 * * 5"
+    branches:
+      - main
 
 jobs:
   plugin_test:
