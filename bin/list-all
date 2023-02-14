@@ -6,7 +6,7 @@ set -o pipefail
 
 : "${GITHUB_API_TOKEN:=""}"
 
-readonly RELEASES_URL="https://api.github.com/repos/google/ko/releases"
+readonly RELEASES_URL="https://api.github.com/repositories/177010499/releases"
 
 sort_versions() {
 	sed 'h; s/[+-]/./g; s/.p\([[:digit:]]\)/.z.\1/; s/$/.z/; G; s/\n/ /' | \
